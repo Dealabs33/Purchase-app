@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEA LABS PURCHASE APP</title>
+    <style>
+     form {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: green;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #444;
+        }
+        #purchase-list {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        .purchase-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+        .purchase-item:last-child {
+            border-bottom: none;
+        }
+        #clear-btn {
+            background-color: #red;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        #country-select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+        }
+     body {
+       background-color: #b834ff;
+       font-type: bodoni, serif;
+     }
+    p {
+       color: white; 
+       text-align: center;
+       font-size: 20px;
+    }
+  h2 { 
+    color: black;
+    font-size: 20px;
+  }
+        #submit-btn { 
+           color: white;
+          background-color: black;
+          padding: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+  label {
+    color: black;
+  }
+  #clear-btn {
+    color: #ffffff;
+    font-size: 20px;
+    background-color: black;
+    margin: 10x;
+    padding: 10px;
+  }
+    </style>
+</head>
+<body>
+  <h2 style="text-align: center; font-weight: bold;"> DEALABS PRICE CALCULATOR</h>
+  <p> This app created by dealabs help you to calculate the total price of things you buy. Type in your goods details. 
+  </p>
+    <form id="purchase-form">
+        <label for="item-name">Item Name:</label>
+        <input type="text" id="item-name" name="item-name"><br><br>
+        <label for="price">Price (NGN):</label>
+        <input type="number" id="price" name="price"><br><br>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity"><br>
+            
+        </select><br><br>
+      <button id="submit-btn" style="font-weight: bold; text-align: center;">Submit</button> 
+  <p> See the result below after tapping on SUBMIT</p>
+      <br> <br> <button id="clear-btn">Clear List</button>
+    </form>
+    <div id="purchase-list"></div>
+    <script>
+        // JavaScript code here
+        const form = document.getElementById('purchase-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const purchaseList = document.getElementById('purchase-list');
+
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const itemName = document.getElementById('item-name').value;
+            const price = document.getElementById('price').value;
+            const quantity = document.getElementById('quantity').value;
+            const totalCost = price * quantity;
+
+            const purchases = JSON.parse(localStorage.getItem('purchases')) || [];
+            purchases.push({ itemName, price: `NGN ${price}`, quantity, totalCost: `NGN ${totalCost}`});
+            localStorage.setItem('purchases', JSON.stringify(purchases));
+
+            displayPurchases();
+        });
+
+        clearBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('purchases');
+            purchaseList.innerHTML = '';
+        });
+
+        function displayPurchases() {
+          const purchases = JSON.parse(localStorage.getItem('purchases')) || [];
+            const html = purchases.map((purchase) => {
+                return `
+                    <div class="purchase-item">
+                        <h2> ITEM NAME: ${purchase.itemName}</h2>
+                      <p style="color: black"> RESULT:::::</p>
+                        <p style="color: white;">Price of Good: ${purchase.price}</p>
+                        <p>Quantity of Good: ${purchase.quantity}</p>
+                        <p>Total Cost: <span style="color: blue;">${purchase.totalCost}</span></p>
+                    </div>
+                `;
+            }).join('');
+            purchaseList.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
